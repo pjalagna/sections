@@ -1,0 +1,44 @@
+<?php
+// file name ReflexT.php
+/* 
+09-08-2018 pja orig
+needs
+*/
+// needs 
+/* lib */ // = library path from this location
+/* screenName */ // htmlT screen name with extension
+/* substitution area */ // var insertion area
+/* process area */ // code extensions 
+// main
+// includes
+require_once '/* lib */unpack.php';
+/* mvcSatus switch 
+a)- provides a reflex back into this file for l1 or l2 processing
+b)-allows multi-path redirection; all submit buttons are named mvcStatus their value provides the name of a file (the .php is added later) to redirect to.
+*/
+$mvcStatus = '';
+$mvcStatus = getPAPX('mvcStatus',$Pa,$Px);
+$to = '';
+$to = getPAPX('to',$Pa,$Px);
+$ccc = 0;
+if (empty($mvcStatus) == true) { $ccc = 1; }
+if ($mvcStatus == $to) { $ccc = 1; }
+if ($ccc == 1) {
+    // display screen
+    //--// fill disp with screen text
+    $filename =  /* screenName */;
+    $fileToOpen = fopen($filename,"r");
+    $disp = fread($fileToOpen, filesize($filename));
+    // add substitutions here str_replace(needle,new,haystack)
+    /* substitution-area */
+echo($disp);
+
+} else { // process screen contents
+/* process-area */
+// lastly redirect to <mvcStatus>
+list($Pa,$Px) = writePAPX('to',getPAPX('mvcStatus',$Pa,$Px). '.php' ,$Pa,$Px);
+include "/* lib */Redirect.php";
+doRe($Pa,$Px);
+exit;
+} // endif      
+?>

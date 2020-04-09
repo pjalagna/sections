@@ -1,0 +1,86 @@
+prefix: /* endMark: @;(2)end postfix: */
+/* notes for sections
+fileName sections.notes.txt 
+pja 03-29-2020
+
+from P.G.Bassett
+[1] create == invoke a frame 
+(a procedure call that occurs at construction time, while constructing program texts);
+[2] var varName == assign a (list of) expression(s) to a frame parameter (a construction-time variable assignment);
+[3] insert == insert frame-text before, instead-of, or after blocks of frame-text, labeled by parameter expressions;
+[4] ??= instantiate a frame parameter (a construction-time expression evaluation);
+[5] include file if included into command frame == 
+select frame-texts for processing (a construction-time case statement); otherwise
+[5a] include file into sectioned file as addition.
+[6] iterate a frame-text while varying certain frame parameters (a construction-time while statement).
+*/
+
+markers format
+prefix "##-"
+postfix "-##"
+format filename.ext:sectionName spaceOffsetNumber
+ie ##- doverb.py:init 4 -##
+sections command format
+for files
+first line of each file is a commented line
+/* prefix: prefixCode endMark endMarkeCode postfix: postfixCode */
+a note about codes 
+1- (#) is a repetition number ie (2)Jump is converted to JumpJump
+2- ;text is a concatenation token. ie Jump;High is converted to JumpHigh
+
+## covered by word comment :: "/*" text "*/"
+def lap1 :-
+[[ 1 ]]  dup c1 '(' = word 'fnin' ! .
+lap1 ::  "("fileName")" | "$"var
+rap :: "{{" multiline text "}}" | "("fileName")" 
+       | $var | number
+rap1 :: rap "+" rap1
+commands:
+::- "set" lap1 rap1 -::
+::- ++ lap1 -::
+::- -- lap1 -::
+::- insert fileName:marker rap1 -::
+-- always after and using space-count from marker
+::- replace lap1 %symbol rap1 -::
+::- collect lap1 from fileName:marker :marker2 -::
+::- include lap1 -:: /* ie call */
+::- return -::
+::- test lap1 op rap1 "true=" lap1 "false=" lap1 -::
+
+
+load(filename) loads r[0] begin playout word by word
+rstack
+include loads next playout till 
+ret pops pop[0]==exit
+
+playout
+r<Word (1(=return rpop ((lastpop ., tail. )) )1)
+       (2(=include lap1 rpush tail. )2)
+       (3(otherwise docmd tail. ))
+
+/* --- unsure -- */
+def sectionsMain :-
+[[ 1 ]] initSections ... .
+[[ 2 ]] 'sections command file name' ask 
+        'SFN' ! 'SFN' @ f@ 'box1' !
+        ... .
+[[ 3 ]] // sections1 .
+;
+def sections1 :-
+/* fence ::- to -:: */
+[[ 1 ]] 'box1' @ word 'endMark' @ = . 
+[[ 2 ]] 'box1' @ "::" "-" cat "-" "::" cat strfence
+        'rest' ! 'curt' ! // sec2 .
+;
+def sec2 :-
+/* command fan */
+[[ 1 ]] 'curt' @ word 'create' = // SCreate .
+[[ 2 ]] 'curt' @ word 'insert' = // SInsert .
+[[ 3 ]] 'curt' @ word 'var' = // SVar .
+[[ 4 ]] 'curt' @ word 'const' = // SConst .
+;
+def code :-
+[[ 1 ]] word 'cw' ! ... .
+[[ 2 ]] 'cw' @
+
+/* @endend */

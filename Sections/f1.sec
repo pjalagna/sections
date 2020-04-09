@@ -1,0 +1,2 @@
+/* prefix: ##- endMark @(2)end postfix: -## */
+::- create f1V.py {{ 'fV.pyt' f@ 'f1V.py' f! . ; }} -::
